@@ -26,8 +26,9 @@ X_train, X_test, y_train, y_test = train_test_split(hog_matrix, categorical_labe
 
 # Define the neural network model
 model = Sequential()
-model.add(Dense(512, activation='relu', input_shape=(8100,), kernel_regularizer=l2(0.01)))
-model.add(Dense(256, activation='relu', kernel_regularizer=l2(0.01)))
+model.add(Dense(512, activation='relu', input_shape=(8100,), kernel_regularizer=l2(0.001)))
+model.add(Dense(256, activation='relu', kernel_regularizer=l2(0.001)))
+model.add(Dense(128, activation='relu', kernel_regularizer=l2(0.001)))
 model.add(Dense(10, activation='softmax'))  # Number of unique classes
 
 # Compile the model
@@ -37,7 +38,7 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
 
 # Train the model
-model.fit(X_train, y_train, epochs=20, batch_size=32, validation_data=(X_test, y_test), callbacks=[early_stopping])
+model.fit(X_train, y_train, epochs=20, batch_size=5, validation_data=(X_test, y_test), callbacks=[early_stopping])
 
 # Evaluate the model
 _, test_accuracy = model.evaluate(X_test, y_test, verbose=0)
